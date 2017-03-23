@@ -1,3 +1,4 @@
+package Lab7;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -34,11 +35,9 @@ public class AreaCheckServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if(list==null){
             list=new ArrayList<Point>();
-            //config.getServletContext().setAttribute("list",list);
         }
         list.add(new Point(Integer.parseInt(request.getParameter("x_coord")),Integer.parseInt(request.getParameter("y_coord"))));
-        config.getServletContext().setAttribute("list",list);
-        String pageTitle="Servlet example";
+	String pageTitle="Servlet example";
         response.setContentType("text/html");
         PrintWriter out=response.getWriter();
         out.println("<html>");
@@ -61,35 +60,37 @@ public class AreaCheckServlet extends HttpServlet {
                 out.println("Entrance");
             out.println("</td>");
         out.println("</tr>");
-        for(int i=0;i<list.size();i++){
+        //for(int i=0;i<list.size();i++){
             out.println("<tr>");
                 out.println("<td>");
-                    out.println(list.get(i).x);
+                    out.println(list.get(list.size()-1).x);
                 out.println("</td>");
                 out.println("<td>");
-                    out.println(list.get(i).y);
+                    out.println(list.get(list.size()-1).y);
                 out.println("</td>");
             out.println("<td>");
-            out.println(request.getParameter("chBox"));
+            list.get(list.size()-1).R=Integer.parseInt(request.getParameter("chBox"));
+            out.println(list.get(list.size()-1).R);
             out.println("</td>");
                 out.println("<td>");
-                    if(checkArea(list.get(i).x,list.get(i).y,Integer.parseInt(request.getParameter("chBox")))){
+                    if(checkArea(list.get(list.size()-1).x,list.get(list.size()-1).y,Integer.parseInt(request.getParameter("chBox")))){
                         out.println("Yes");
+                        list.get(list.size()-1).isInArea=true;
                     }
                     else{
                         out.println("No");
+                        list.get(list.size()-1).isInArea=false;
                     }
 
                 out.println("</td>");
             out.println("</tr>");
 
-        }
+        //}
         out.println("</table>");
-        out.println("<a href='/lab7'>Do you want add another point?</a>");
+        out.println("<a href='/'>Do you want add another point?</a>");
 
         out.println("</body>");
         out.println("</html>");
-        //request.getRequestDispatcher("/WEB-INF/checking.jsp").forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -113,10 +114,12 @@ public class AreaCheckServlet extends HttpServlet {
 	JsonArray res = result.build();
 	out.println(res);
     }
-    class Point {
-        private double x;
-        private double y;
-        Point(double x,double y){
+public class Point {
+       public double x;
+       public double y;
+       public boolean isInArea;
+       public  int R;
+        Point(int x,int y){
             this.x=x;
             this.y=y;
         }

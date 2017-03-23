@@ -1,4 +1,5 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" language="java" import="java.util.List, java.util.ArrayList, Lab7.AreaCheckServlet"%>
+
 <!DOCTYPE html>
 <head>
     <style>
@@ -34,7 +35,7 @@
     <div id="head">
         Атепаев Михаил и Слобода Даниил
         группа P3210
-        Вариант 10000
+        Вариант 10020
     </div>
     <script type="text/javascript">
 	x_val = [];
@@ -133,6 +134,7 @@ function doRequest(x, y){
                             }
                         }
                         canvasFill();
+			doRequest(x_val, y_val);
                     }
 
                     function canvasFill(){
@@ -233,6 +235,53 @@ function doRequest(x, y){
         </tr>
     </table>
     <input type="submit" value="Отправить">
-	<div id="result"> </div>
 </form>
+<%
+	out.println("HERE");
+        List<AreaCheckServlet.Point> list=(ArrayList<AreaCheckServlet.Point>)getServletConfig().getServletContext().getAttribute("list");
+
+        if(list!=null){
+    out.println("<table border=\"1\" bordercolor=\"red\" >");
+    out.println("<tr>");
+        out.println("<td>");
+            out.println("X coordinate");
+            out.println("</td>");
+        out.println("<td>");
+            out.println("Y coordinate");
+            out.println("</td>");
+        out.println("<td>");
+            out.println("Radius");
+            out.println("</td>");
+        out.println("<td>");
+            out.println("Entrance");
+            out.println("</td>");
+        out.println("</tr>");
+
+        for(int i=0;i<list.size();i++){
+    out.println("<tr>");
+        out.println("<td>");
+            out.println(list.get(i).x);
+            out.println("</td>");
+        out.println("<td>");
+            out.println(list.get(i).y);
+            out.println("</td>");
+        out.println("<td>");
+            out.println(list.get(i).R);
+            out.println("</td>");
+        out.println("<td>");
+
+            if(list.get(i).isInArea){
+            out.println("Yes");
+            }
+            else{
+            out.println("No");
+            }
+
+            out.println("</td>");
+        out.println("</tr>");
+    }
+    out.println("</table>");
+    }
+   %>
 </body>
+
